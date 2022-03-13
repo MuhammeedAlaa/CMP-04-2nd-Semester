@@ -1,3 +1,4 @@
+package Lab2;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
@@ -14,28 +15,25 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 public class Lab2 {
 
   public static class TokenizerMapper
-       extends Mapper<Object, Text, IntWritable, IntWritable>{
-
-    private final static IntWritable customerId = new IntWritable();
+       extends Mapper<Object, Text, Text, IntWritable>{
+    
     private final static IntWritable prepaidCardAmount = new IntWritable();
+    private Text customerId = new Text();    
     public void map(Object key, Text value, Context context
                     ) throws IOException, InterruptedException {
-      
-      StringTokenizer itr = new StringTokenizer(value.toString());   
-      while (itr.hasMoreTokens()) {
-        String[] splitedData = itr.nextToken().toString().split("[,]");
-        customerId.set(Integer.parseInt(splitedData[0]));
-        prepaidCardAmount.set(Integer.parseInt(splitedData[1])); 
-        context.write(customerId, prepaidCardAmount);
-      }
+      String line = value.toString();
+      String[] splitedData = line.split("[,]");
+      customerId.set(splitedData[0]);
+      prepaidCardAmount.set(Integer.parseInt(splitedData[1]));
+      context.write(customerId, prepaidCardAmount);
     }
   }
 
   public static class IntSumReducer
-       extends Reducer<Text,IntWritable,IntWritable,IntWritable> {
+       extends Reducer<Text,IntWritable,Text,IntWritable> {
     private IntWritable result = new IntWritable();
 
-    public void reduce(IntWritable key, Iterable<IntWritable> values,
+    public void reduce(Text key, Iterable<IntWritable> values,
                        Context context
                        ) throws IOException, InterruptedException {
       int sum = 0;
@@ -54,7 +52,7 @@ public class Lab2 {
     job.setMapperClass(TokenizerMapper.class);
     job.setCombinerClass(IntSumReducer.class);
     job.setReducerClass(IntSumReducer.class);
-    job.setOutputKeyClass(IntWritable.class);
+    job.setOutputKeyClass(Text.class);
     job.setOutputValueClass(IntWritable.class);
     FileInputFormat.addInputPath(job, new Path(args[0]));
     FileOutputFormat.setOutputPath(job, new Path(args[1]));
