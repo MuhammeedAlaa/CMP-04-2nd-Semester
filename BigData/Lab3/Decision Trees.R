@@ -1,4 +1,4 @@
-setwd("")
+setwd("/Users/muhammadalaa/Desktop/CMP/CMP-04-2nd-Semester/BigData/Lab3/")
 
 # install.packages("rpart.plot")
 # install.packages("ROCR")
@@ -28,6 +28,8 @@ summary(fit)
 # where the split that gives the minimum gini index will be considered for the current split
 # which is faster than information gain because it doesn't have the log part
 
+#-----------------------------------------------------------------------------------------------------------------
+
 # Q2: what are the meanings of these control parameters?  
 #          1- "minsplit=2"
 # the minimum number of observations that must exist in a node 
@@ -41,30 +43,36 @@ summary(fit)
 # minbucket is "the minimum number of observations in any terminal node".
 #
 # Support your answers with graphs for different values of these parameters.
+# By changing the minsplit parameter it couldn't split further from temp = mild.
 rpart.plot(rpart(Play ~ Outlook + Temperature + Humidity + Wind,
                  method="class", 
                  data=play_decision,
                  control=rpart.control(minsplit=4, maxdepth = 3),
                  parms=list(split='information')), type = 4, extra = 1)
 
+# By changing the maxsdepth parameter the depth is restricted to 1.
 rpart.plot(rpart(Play ~ Outlook + Temperature + Humidity + Wind,
                  method="class", 
                  data=play_decision,
                  control=rpart.control(minsplit=2, maxdepth = 1),
                  parms=list(split='information')), type = 4, extra = 1)
 
+# By changing the minbucket parameter we couldn't split as the left branch has less than 4 elements.
 rpart.plot(rpart(Play ~ Outlook + Temperature + Humidity + Wind,
                  method="class", 
                  data=play_decision,
-                 control=rpart.control(minsplit=2, maxdepth = 3, minbucket =4),
+                 control=rpart.control(maxdepth = 3, minbucket =4),
                  parms=list(split='information')), type = 4, extra = 1)
 
+#-----------------------------------------------------------------------------------------------------------------
 
 #Q3: What will happen if only one of either minsplit or minbucket is specified
 #    and not the other?
 # If only one of minbucket or minsplit is specified, the code either sets 
 # minsplit to minbucket*3 or minbucket to minsplit/3, as appropriate.
 #
+
+#-----------------------------------------------------------------------------------------------------------------
 
 #Q4: What does 'type' and 'extra' parameters mean in the plot function?
 # 
@@ -104,6 +112,7 @@ rpart.plot(rpart(Play ~ Outlook + Temperature + Humidity + Wind,
 #   11 Class models: Like 10 but don't display the fitted class.
 #   +100 Add 100 to any of the above to also display the percentage of observations in the node. For example extra=101 displays the number and percentage of observations in the node. Actually, it's a weighted percentage using the weights passed to rpart.
 
+#-----------------------------------------------------------------------------------------------------------------
 
 #Q5: Plot the tree with propabilities instead of number of observations in each node.
 ######################################################################################
@@ -122,6 +131,8 @@ predict(fit,newdata=newdata2,type=c("class"))
 ######################################################################################
 #Q6: What is the predicted class for this test case?
 # yes play is possible
+
+#-----------------------------------------------------------------------------------------------------------------
 
 #Q7: State the sequence of tree node checks to reach this class (label).
 # right branch as temperature is hot then right branch as wind is false

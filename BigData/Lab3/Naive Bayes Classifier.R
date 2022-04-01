@@ -41,3 +41,4 @@ print(paste0("Acc = %", sum(results == testdata$income)/nrow(testdata) * 100))
 print(paste0("misclassification rates (10-50K) = % ", sum(results != testdata$income & testdata$income == '10-50K') / sum(testdata$income == '10-50K') * 100))
 print(paste0("misclassification rates (50-80K) = % ", sum(results != testdata$income & testdata$income == '50-80K') / sum(testdata$income == '50-80K') * 100))
 print(paste0("misclassification rates (GT 80K) = % ", sum(results != testdata$income & testdata$income == 'GT 80K') / sum(testdata$income == 'GT 80K') * 100))
+
