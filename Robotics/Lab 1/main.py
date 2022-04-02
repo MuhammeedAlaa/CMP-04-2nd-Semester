@@ -58,33 +58,36 @@ class Sensor:
             return True
         return False
 
-    def measurements_draw_rays(self, robot: Robot, test_map: Any):
-        z = []
+    def measurements_draw_rays(self, robot: Robot, test_map: Any, file: Any):
         start = robot.theta - int(self.sensor_angle / 2)
         end = robot.theta + int(self.sensor_angle / 2)
+        file.write('\n\t\t\tmeasurements\n rayX, rayY, raylength, RayAngle \n')
         for angle in range(start, end, self.sensor_resolution):
             new_x, new_y = robot.x, robot.y
             while (self.check_ray_collision(test_map, new_x, new_y)) is False and self.sense_destance(new_x, new_y, robot) <= self.max_range:
                 new_x, new_y = self.move_ray(1, new_x, new_y, angle)
             cv.line(test_map, (robot.x, robot.y), (int(new_x), int(new_y)), 200, 2)
-            z.append(self.sense_destance(new_x, new_y, robot) * 4)            
-        return z, test_map
+            file.write(str(new_x) + ', ' + str(new_y) + ', ' + str(self.sense_destance(new_x, new_y, robot) * 4) + ', ' + str(angle) + '\n')            
+        return test_map
 
 class Problem1:
-    def __init__(self):
-        pass
+    def __init__(self, file: Any):
+        self.outfile = file
     def solve(self, robot: Robot, test_map: Any, sensor: Sensor):
-        z, test_map_with_robot_and_rays = sensor.measurements_draw_rays(robot, test_map)
+        file.write('RobotX, RobotY, RobotAngle\n')
+        file.write(str(robot.x) + ', ' + str(robot.y) + ', ' + str(robot.theta) + '\n')
+        test_map_with_robot_and_rays = sensor.measurements_draw_rays(robot, test_map, file)
         test_map_with_robot_and_rays = robot.draw(test_map_with_robot_and_rays)
-        print(z)
+        file.close()
         cv.imshow('map', test_map_with_robot_and_rays)
         cv.waitKey(0)
 
 
 if __name__ == "__main__":
     test_map = cv.imread('Assignment_04_Grid_Map.png', cv.IMREAD_GRAYSCALE)
+    file = open("output.txt", "a")
     robot = Robot()
     robot.x, robot.y, robot.theta =  370, 182, 180
     sensor = Sensor()
-    problem1 = Problem1()
+    problem1 = Problem1(file)
     problem1.solve(robot, test_map, sensor)
