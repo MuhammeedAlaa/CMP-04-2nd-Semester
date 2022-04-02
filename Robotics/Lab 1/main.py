@@ -84,7 +84,7 @@ class Problem1:
 if __name__ == "__main__":
     test_map = cv.imread('Assignment_04_Grid_Map.png', cv.IMREAD_GRAYSCALE)
     robot = Robot()
-    robot.x, robot.y, robot.theta =  510, 182, 180
+    robot.x, robot.y, robot.theta =  370, 182, 180
     sensor = Sensor()
     problem1 = Problem1()
     problem1.solve(robot, test_map, sensor)
