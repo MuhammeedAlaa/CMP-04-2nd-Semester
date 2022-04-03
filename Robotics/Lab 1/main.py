@@ -63,7 +63,7 @@ class Sensor:
     def measurements_draw_rays(self, robot: Robot, test_map: Any, file: Any):
         start = robot.theta - int(self.sensor_angle / 2)
         end = robot.theta + int(self.sensor_angle / 2)
-        file.write('\n\t\t\tmeasurements\n rayX, rayY, raylength, RayAngle \n')
+        file.write('\n\t\t\t\t\tmeasurements\n rayX, rayY, raylength, RayAngle \n')
         for angle in range(start, end + 1, self.sensor_resolution):
             new_x, new_y = robot.x, robot.y
             while (self.check_ray_collision(test_map, new_x, new_y)) is False and self.sense_destance(new_x, new_y, robot) <= self.max_range:
@@ -88,7 +88,7 @@ class Problem1:
         test_map_with_robot_and_rays = sensor.measurements_draw_rays(robot, test_map, file)
         test_map_with_robot_and_rays = robot.draw(test_map_with_robot_and_rays)
         file.close()
-        _ = cv.imwrite('likelihood_field.png', test_map_with_robot_and_rays)
+        _ = cv.imwrite('Problem1_output.png', test_map_with_robot_and_rays)
 
 
 class Proplem2():
@@ -98,7 +98,7 @@ class Proplem2():
 
 
     def solve(self, test_map: Any, robot: Robot, sensor: Sensor):
-        _ = cv.imwrite('likelihood_field.png', self.likelihood_field)
+        _ = cv.imwrite('Problem2_likelihood_field.png', self.likelihood_field)
         for y in range(0, self.likelihood_field.shape[0]):
             for x in range(0, self.likelihood_field.shape[1]):
                 for angle in range(0, 360):
@@ -118,7 +118,7 @@ class Proplem2():
                     self.propbability_map[y][x] = max(self.propbability_map[y][x], prop)
         maximum = max(map(max, self.propbability_map))
         position = -1, -1
-        x = cv.imwrite('prob_map.png', self.propbability_map) 
+        _ = cv.imwrite('Problem2_prob_map.png', self.propbability_map) 
         if maximum > 0: 
             self.propbability_map = [[(x / maximum) * 255 for x in y] for y in self.propbability_map]
             for y in range(len(self.propbability_map)):
@@ -128,13 +128,13 @@ class Proplem2():
         robot.x = position[0]
         robot.y = position[1]
         map_with_robot = robot.draw(test_map)
-        x = cv.imwrite('robot_pose.png', map_with_robot)
+        _ = cv.imwrite('Problem2_output.png', map_with_robot)
 
 
 if __name__ == "__main__":
     now = datetime.now()
     test_map = cv.imread('Assignment_04_Grid_Map.png', cv.IMREAD_GRAYSCALE)
-    file = open("output.txt", "w")
+    file = open("Problem1_output.txt", "w")
     robot = Robot()
     robot.x, robot.y, robot.theta =  370, 182, 180
     sensor = Sensor()
