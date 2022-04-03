@@ -20,7 +20,7 @@ This is the output for problem 2
 * you need to install `cv2`
   
 # Run instructions
-Run this command in terminal in the project dirctory `python3 maiin.py`.
+Run this command in terminal in the project dirctory `python3 main.py`.
 
 # Student Info
 - Name: Muhammad Alaa Abd El-khaliq
