@@ -2,7 +2,7 @@
 -   Robot pose (370, 182, 180)
 -   Robot radius 15
 # Problem 1
-_ ## This is the output for problem 1
+- ## This is the output for problem 1
 ![image](Problem1_output.png)
 - [output text file](Problem1_output.txt)
 # Problem 2
